@@ -1,0 +1,148 @@
+.match-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  transition: border-color 0.2s ease;
+}
+
+.match-card:hover {
+  border-color: #1a1a1a;
+}
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.match-league {
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 0.85rem;
+}
+
+.match-date {
+  color: #999;
+  font-size: 0.8rem;
+}
+
+.match-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  text-align: center;
+}
+
+.team-logo {
+  font-size: 1.8rem;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+}
+
+.team-name {
+  font-weight: 500;
+  color: #1a1a1a;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.team-score {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.match-vs {
+  font-weight: 500;
+  color: #ccc;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.match-status {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.status-badge.finished {
+  background: white;
+  color: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.status-badge.live {
+  background: white;
+  color: #c62828;
+  border-color: #c62828;
+}
+
+.status-badge.scheduled {
+  background: white;
+  color: #666;
+  border-color: #d0d0d0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.match-venue {
+  text-align: center;
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+@media (max-width: 480px) {
+  .match-teams {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .team {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .match-vs {
+    display: none;
+  }
+}
