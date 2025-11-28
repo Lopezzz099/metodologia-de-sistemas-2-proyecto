@@ -5,63 +5,61 @@ const TeamCard = ({ team }) => {
   return (
     <div className="team-card">
       <div className="team-card-header">
-        <div className="team-card-logo">{team.logo || '👕'}</div>
-        <h3 className="team-card-name">{team.name || 'Nombre del Equipo'}</h3>
+        <div className="team-card-logo">👕</div>
+        <h3 className="team-card-name">{team.nombre || 'Nombre del Equipo'}</h3>
       </div>
 
       <div className="team-card-info">
-        {team.league && (
+        {team.liga && (
           <div className="info-row">
             <span className="info-label">Liga:</span>
-            <span className="info-value">{team.league}</span>
+            <span className="info-value">{team.liga}</span>
           </div>
         )}
 
-        {team.country && (
+        {team.pais && (
           <div className="info-row">
             <span className="info-label">País:</span>
-            <span className="info-value">{team.country}</span>
+            <span className="info-value">{team.pais}</span>
           </div>
         )}
 
-        {team.founded && (
+        {team.fundado && (
           <div className="info-row">
             <span className="info-label">Fundado:</span>
-            <span className="info-value">{team.founded}</span>
+            <span className="info-value">{team.fundado}</span>
           </div>
         )}
 
-        {team.stadium && (
+        {team.estadio && (
           <div className="info-row">
             <span className="info-label">Estadio:</span>
-            <span className="info-value">{team.stadium}</span>
+            <span className="info-value">{team.estadio}</span>
           </div>
         )}
 
-        {team.coach && (
+        {team.entrenador && (
           <div className="info-row">
             <span className="info-label">Entrenador:</span>
-            <span className="info-value">{team.coach}</span>
+            <span className="info-value">{team.entrenador}</span>
           </div>
         )}
       </div>
 
-      {team.stats && (
-        <div className="team-card-stats">
-          <div className="stat">
-            <span className="stat-value">{team.stats.wins || 0}</span>
-            <span className="stat-label">Victorias</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">{team.stats.draws || 0}</span>
-            <span className="stat-label">Empates</span>
-          </div>
-          <div className="stat">
-            <span className="stat-value">{team.stats.losses || 0}</span>
-            <span className="stat-label">Derrotas</span>
-          </div>
+      <div className="team-card-stats">
+        <div className="stat">
+          <span className="stat-value">{team.victorias || 0}</span>
+          <span className="stat-label">Victorias</span>
         </div>
-      )}
+        <div className="stat">
+          <span className="stat-value">{team.empates || 0}</span>
+          <span className="stat-label">Empates</span>
+        </div>
+        <div className="stat">
+          <span className="stat-value">{team.derrotas || 0}</span>
+          <span className="stat-label">Derrotas</span>
+        </div>
+      </div>
     </div>
   )
 }

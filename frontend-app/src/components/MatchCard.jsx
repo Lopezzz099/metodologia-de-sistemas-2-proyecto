@@ -2,40 +2,48 @@ import React from 'react'
 import './MatchCard.css'
 
 const MatchCard = ({ match }) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Fecha'
+    const date = new Date(dateString)
+    return date.toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    })
+  }
+
   return (
     <div className="match-card">
       <div className="match-header">
-        <span className="match-league">{match.league || 'Liga'}</span>
-        <span className="match-date">{match.date || 'Fecha'}</span>
+        <span className="match-league">{match.liga || 'Liga'}</span>
+        <span className="match-date">{formatDate(match.fecha)}</span>
       </div>
 
       <div className="match-teams">
         <div className="team home">
-          <div className="team-logo">{match.homeTeamLogo || '🏠'}</div>
-          <span className="team-name">{match.homeTeam || 'Equipo Local'}</span>
-          <span className="team-score">{match.homeScore !== undefined ? match.homeScore : '-'}</span>
+          <div className="team-logo">🏠</div>
+          <span className="team-name">{match.equipo1 || 'Equipo Local'}</span>
+          <span className="team-score">{match.res_equipo1 !== undefined && match.res_equipo1 !== null ? match.res_equipo1 : '-'}</span>
         </div>
 
         <div className="match-vs">VS</div>
 
         <div className="team away">
-          <div className="team-logo">{match.awayTeamLogo || '✈️'}</div>
-          <span className="team-name">{match.awayTeam || 'Equipo Visitante'}</span>
-          <span className="team-score">{match.awayScore !== undefined ? match.awayScore : '-'}</span>
+          <div className="team-logo">✈️</div>
+          <span className="team-name">{match.equipo2 || 'Equipo Visitante'}</span>
+          <span className="team-score">{match.res_equipo2 !== undefined && match.res_equipo2 !== null ? match.res_equipo2 : '-'}</span>
         </div>
       </div>
 
-      {match.status && (
-        <div className="match-status">
-          <span className={`status-badge ${match.status.toLowerCase()}`}>
-            {match.status}
-          </span>
-        </div>
-      )}
+      <div className="match-status">
+        <span className={`status-badge ${match.jugado ? 'finished' : 'scheduled'}`}>
+          {match.jugado ? 'Finalizado' : 'Programado'}
+        </span>
+      </div>
 
-      {match.venue && (
+      {match.estadio && (
         <div className="match-venue">
-          📍 {match.venue}
+          📍 {match.estadio}
         </div>
       )}
     </div>

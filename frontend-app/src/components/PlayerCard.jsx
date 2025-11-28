@@ -5,67 +5,65 @@ const PlayerCard = ({ player }) => {
   return (
     <div className="player-card">
       <div className="player-card-header">
-        <div className="player-avatar">{player.avatar || '⚽'}</div>
+        <div className="player-avatar">⚽</div>
         <div className="player-basic-info">
-          <h3 className="player-name">{player.name || 'Nombre del Jugador'}</h3>
-          {player.position && (
-            <span className="player-position">{player.position}</span>
+          <h3 className="player-name">{player.nombre || 'Nombre del Jugador'}</h3>
+          {player.posicion && (
+            <span className="player-position">{player.posicion}</span>
           )}
         </div>
       </div>
 
       <div className="player-card-info">
-        {player.team && (
+        {player.equipo && (
           <div className="info-row">
             <span className="info-label">Equipo:</span>
-            <span className="info-value">{player.team}</span>
+            <span className="info-value">{player.equipo}</span>
           </div>
         )}
 
-        {player.nationality && (
+        {player.nacionalidad && (
           <div className="info-row">
             <span className="info-label">Nacionalidad:</span>
-            <span className="info-value">{player.nationality}</span>
+            <span className="info-value">{player.nacionalidad}</span>
           </div>
         )}
 
-        {player.age && (
+        {player.edad && (
           <div className="info-row">
             <span className="info-label">Edad:</span>
-            <span className="info-value">{player.age} años</span>
+            <span className="info-value">{player.edad} años</span>
           </div>
         )}
 
-        {player.number && (
+        {player.numero_camiseta && (
           <div className="info-row">
             <span className="info-label">Número:</span>
-            <span className="info-value">#{player.number}</span>
+            <span className="info-value">#{player.numero_camiseta}</span>
           </div>
         )}
       </div>
 
-      {player.stats && (
-        <div className="player-stats">
-          {player.stats.goals !== undefined && (
-            <div className="stat">
-              <span className="stat-value">{player.stats.goals}</span>
-              <span className="stat-label">Goles</span>
-            </div>
-          )}
-          {player.stats.assists !== undefined && (
-            <div className="stat">
-              <span className="stat-value">{player.stats.assists}</span>
-              <span className="stat-label">Asistencias</span>
-            </div>
-          )}
-          {player.stats.matches !== undefined && (
-            <div className="stat">
-              <span className="stat-value">{player.stats.matches}</span>
-              <span className="stat-label">Partidos</span>
-            </div>
-          )}
-        </div>
-      )}
+      <div className="player-stats">
+        {player.goles !== undefined && (
+          <div className="stat">
+            <span className="stat-value">{player.goles}</span>
+            <span className="stat-label">Goles</span>
+          </div>
+        )}
+        {player.asistencias !== undefined && (
+          <div className="stat">
+            <span className="stat-value">{player.asistencias}</span>
+            <span className="stat-label">Asistencias</span>
+          </div>
+        )}
+        {player.partidos !== undefined && (
+          <div className="stat">
+            <span className="stat-value">{player.partidos}</span>
+            <span className="stat-label">Partidos</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

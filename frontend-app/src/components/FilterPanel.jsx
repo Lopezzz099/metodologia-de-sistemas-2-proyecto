@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './FilterPanel.css'
 import { apiService } from '../services/apiService'
 
@@ -11,13 +11,129 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
     dateTo: ''
   })
 
+  const debounceTimer = useRef(null)
+
+  const performSearch = async (currentFilters, forceSearch = false) => {
+    const hasActiveFilter = currentFilters.league || 
+                           currentFilters.team || 
+                           currentFilters.player || 
+                           (currentFilters.dateFrom && currentFilters.dateTo)
+    
+    if (!hasActiveFilter && !forceSearch) {
+      setResults([])
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    try {
+      let results = []
+      
+      switch(searchType) {
+        case 'matches':
+          results = await apiService.getMatches(currentFilters)
+          break
+        case 'teams':
+          results = await apiService.getTeams(currentFilters)
+          break
+        case 'players':
+          results = await apiService.getPlayers(currentFilters)
+          break
+        default:
+          results = []
+      }
+
+      setResults(results)
+    } catch (err) {
+      setError(err.message || 'Error al realizar la búsqueda')
+      console.error('Search error:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFilters(prev => ({
-      ...prev,
+    const newFilters = {
+      ...filters,
       [name]: value
-    }))
+    }
+    setFilters(newFilters)
+
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      performSearch(newFilters)
+    }, 500)
   }
+
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current)
+      }
+    }
+  }, [])
+
+  const getInputsState = () => {
+    if (searchType === 'matches') {
+      if (filters.dateFrom || filters.dateTo) {
+        return {
+          league: false,
+          team: false,
+          dateFrom: true,
+          dateTo: true
+        }
+      }
+      if (filters.league) {
+        return {
+          league: true,
+          team: false,
+          dateFrom: false,
+          dateTo: false
+        }
+      }
+      if (filters.team) {
+        return {
+          league: false,
+          team: true,
+          dateFrom: false,
+          dateTo: false
+        }
+      }
+      return {
+        league: true,
+        team: true,
+        dateFrom: true,
+        dateTo: true
+      }
+    }
+    if (searchType === 'teams') {
+      if (filters.team) {
+        return { team: true, league: false }
+      }
+      if (filters.league) {
+        return { team: false, league: true }
+      }
+      return { team: true, league: true }
+    }
+    if (searchType === 'players') {
+      if (filters.player) {
+        return { player: true, team: false }
+      }
+      if (filters.team) {
+        return { player: false, team: true }
+      }
+      return { player: true, team: true }
+    }
+
+    return {}
+  }
+
+  const inputsState = getInputsState()
 
   const handleSearchTypeChange = (type) => {
     setSearchType(type)
@@ -33,33 +149,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
-    setError(null)
-
-    try {
-      let results = []
-      
-      switch(searchType) {
-        case 'matches':
-          results = await apiService.getMatches(filters)
-          break
-        case 'teams':
-          results = await apiService.getTeams(filters)
-          break
-        case 'players':
-          results = await apiService.getPlayers(filters)
-          break
-        default:
-          results = []
-      }
-
-      setResults(results)
-    } catch (err) {
-      setError(err.message || 'Error al realizar la búsqueda')
-      console.error('Search error:', err)
-    } finally {
-      setLoading(false)
-    }
+    performSearch(filters, true)
   }
 
   const handleReset = () => {
@@ -110,6 +200,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.league}
                   onChange={handleInputChange}
                   placeholder="Ej: La Liga, Premier League"
+                  disabled={!inputsState.league}
                 />
               </div>
 
@@ -122,6 +213,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.team}
                   onChange={handleInputChange}
                   placeholder="Ej: Barcelona, Real Madrid"
+                  disabled={!inputsState.team}
                 />
               </div>
 
@@ -133,6 +225,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   name="dateFrom"
                   value={filters.dateFrom}
                   onChange={handleInputChange}
+                  disabled={!inputsState.dateFrom}
                 />
               </div>
 
@@ -144,6 +237,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   name="dateTo"
                   value={filters.dateTo}
                   onChange={handleInputChange}
+                  disabled={!inputsState.dateTo}
                 />
               </div>
             </>
@@ -160,6 +254,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.team}
                   onChange={handleInputChange}
                   placeholder="Ej: Barcelona, Real Madrid"
+                  disabled={!inputsState.team}
                 />
               </div>
 
@@ -172,6 +267,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.league}
                   onChange={handleInputChange}
                   placeholder="Ej: La Liga, Premier League"
+                  disabled={!inputsState.league}
                 />
               </div>
             </>
@@ -188,6 +284,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.player}
                   onChange={handleInputChange}
                   placeholder="Ej: Messi, Cristiano"
+                  disabled={!inputsState.player}
                 />
               </div>
 
@@ -200,6 +297,7 @@ const FilterPanel = ({ onSearch, searchType, setSearchType, setResults, setLoadi
                   value={filters.team}
                   onChange={handleInputChange}
                   placeholder="Ej: Barcelona, Real Madrid"
+                  disabled={!inputsState.team}
                 />
               </div>
             </>

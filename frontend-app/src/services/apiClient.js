@@ -20,7 +20,10 @@ class ApiClient {
   async get(endpoint, params = {}) {
     try {
       const response = await this.client.get(endpoint, { params })
-      return response.data
+      if (response.data.error) {
+        throw new Error('Error en la respuesta de la API')
+      }
+      return response.data.body
     } catch (error) {
       console.error('API Error:', error)
       throw new Error(error.response?.data?.message || 'Error al conectar con el servidor')
